@@ -1,0 +1,249 @@
+SQL> SHUTDOWN IMMEDIATE
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP MOUNT PFILE= O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+SQL> ALTER DATABASE ARCHIVELOG;
+
+Database altered.
+
+SQL>  ALTER DATABASE OPEN;
+
+Database altered.
+
+SQL> ALTER TABLESPACE INDX01 BEGIN BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE USERS01 BEGIN BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE RONLY BEGIN BACKUP;
+ALTER TABLESPACE RONLY BEGIN BACKUP
+*
+ERROR at line 1:
+ORA-00959: tablespace 'RONLY' does not exist 
+
+
+SQL> ALTER TABLESPACE SYSAUX BEGIN BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE SYSTEM BEGIN BACKUP;
+
+Tablespace altered.
+
+SQL> SELECT TABLESPACE_NAME FROM DBA_DATA_FILES;
+
+TABLESPACE_NAME                                                                 
+------------------------------                                                  
+SYSTEM                                                                          
+INDX01                                                                          
+USERS01                                                                         
+SYSAUX                                                                          
+UNDOTBS                                                                         
+
+SQL> ALTER TABLESPACE UNDOTBS BEGIN BACKUP;
+
+Tablespace altered.
+
+SQL> SELECT FILE#, STATUS FROM V$BACKUP;
+
+     FILE# STATUS                                                               
+---------- ------------------                                                   
+         1 ACTIVE                                                               
+         2 ACTIVE                                                               
+         3 ACTIVE                                                               
+         4 ACTIVE                                                               
+         5 ACTIVE                                                               
+
+SQL> ALTER TABLESPACE SYSTEM END BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE INDEX01 END BACKUP;
+ALTER TABLESPACE INDEX01 END BACKUP
+*
+ERROR at line 1:
+ORA-00959: tablespace 'INDEX01' does not exist 
+
+
+SQL> ALTER TABLESPACE INDX01 END BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE USERS01 END BACKUP;
+
+Tablespace altered.
+
+SQL> ALTER TABLESPACE SYSAUX END BACKUP;
+
+Tablespace altered.
+
+SQL> SELECT FILE#, STATUS FROM V$BACKUP;
+
+     FILE# STATUS                                                               
+---------- ------------------                                                   
+         1 NOT ACTIVE                                                           
+         2 NOT ACTIVE                                                           
+         3 NOT ACTIVE                                                           
+         4 NOT ACTIVE                                                           
+         5 ACTIVE                                                               
+
+SQL> ALTER TABLESPACE UNDOTBS END BACKUP;
+
+Tablespace altered.
+
+SQL> SELECT FILE#, STATUS FROM V$BACKUP;
+
+     FILE# STATUS                                                               
+---------- ------------------                                                   
+         1 NOT ACTIVE                                                           
+         2 NOT ACTIVE                                                           
+         3 NOT ACTIVE                                                           
+         4 NOT ACTIVE                                                           
+         5 NOT ACTIVE                                                           
+
+SQL> ALTER SYSTEM SWITCH LOGFILE
+  2  ;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER DATABASE BACKUP CONTROLFILE 'O:\DB809\ORACLE\ADMIN\backup';
+ALTER DATABASE BACKUP CONTROLFILE 'O:\DB809\ORACLE\ADMIN\backup'
+                                  *
+ERROR at line 1:
+ORA-00946: missing TO keyword 
+
+
+SQL> ALTER DATABASE BACKUP CONTROLFILE TO 'O:\DB809\ORACLE\ADMIN\backup';
+ALTER DATABASE BACKUP CONTROLFILE TO 'O:\DB809\ORACLE\ADMIN\backup'
+*
+ERROR at line 1:
+ORA-01580: error creating control backup file O:\DB809\ORACLE\ADMIN\backup 
+ORA-27040: file create error, unable to create file 
+OSD-04002: unable to open file 
+O/S-Error: (OS 3) The system cannot find the path specified. 
+
+
+SQL> ALTER DATABASE BACKUP CONTROLFILE TO 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\BACKUP';
+ALTER DATABASE BACKUP CONTROLFILE TO 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\BACKUP'
+*
+ERROR at line 1:
+ORA-01580: error creating control backup file 
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\BACKUP 
+ORA-27038: created file already exists 
+OSD-04010: <create> option specified, file already exists 
+
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> ALTER SYSTEM SWITCH LOGFILE;
+
+System altered.
+
+SQL> SHUTDOWN ABORT;
+ORACLE instance shut down.
+SQL> STARTUP MOUNT PFILE= O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+SQL> SHUTDOWN ABORT
+ORACLE instance shut down.
+SQL> STARTUP MOUNT PFILE= O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+SQL> RECOVER DATABASE;
+ORA-00283: recovery session canceled due to errors 
+ORA-01110: data file 4: 
+'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF' 
+ORA-01157: cannot identify/lock data file 4 - see DBWR trace file 
+ORA-01110: data file 4: 
+'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF' 
+
+
+SQL> ALTER DATABASE OPEN;
+ALTER DATABASE OPEN
+*
+ERROR at line 1:
+ORA-01157: cannot identify/lock data file 4 - see DBWR trace file 
+ORA-01110: data file 4: 
+'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF' 
+
+
+SQL> ALTER DATABSE OPEN;
+ALTER DATABSE OPEN
+      *
+ERROR at line 1:
+ORA-00940: invalid ALTER command 
+
+
+SQL> ALTER DATABASE OPEN;
+
+Database altered.
+
+SQL> SOPOL OFF;
+SP2-0042: unknown command "SOPOL OFF" - rest of line ignored.
+SQL> SPOOL OFF;

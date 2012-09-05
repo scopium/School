@@ -1,0 +1,19 @@
+As the DBA for your company, you have decided to install a new version of the Oracle Enterprise database to replace the current database version being used. The old database has become a constant headache and seems to be causing an overload on the disk drive's I/O channels. Further analysis has also shown that two primary large tables are the main points of access. These tables are CUST_REC and ACCT_RECV tables. You also have a new server with three large-capacity disk drives: F, G, and H. Briefly, provide the following information.
+
+Describe how you plan to rectify the I/O problem with the new Oracle10g database.
+Place and save your answers in a Word document named "yourname_Lab_2.docx."
+
+A data dictionary contains:
+
+the definitions of all schema objects in the database (tables, views, indexes, clusters, synonyms, sequences, procedures, functions, packages, triggers, etc.);
+how much space has been allocated for, and is used by, the schema objects;
+default values for columns;
+integrity constraint information;
+the names of Oracle users;
+privileges and roles each user has been granted;
+auditing information, such as who has accessed or updated various schema objects; and
+other general database information.
+
+With the migration to a new DB and fixing the overload issue, the DB can use the Data files to get the definitions of all the schema objects in the db such as the tables, views, indexes, etc.. He can also determine the amount of space allocated by the schema object which he can optimize in the new DB. Also, all the oracle users are in the data dictionary which he will need to migrate as well as their privileges. The data dictionary also provides the DBA with auditing information such as recent activity and general db information.  Also the DBA can use the oracle managed files to not worry about directly managing the operating system files compromising an Oracle DB. The DBA can specify operations in terms of DB objects rather than filenames.
+
+The DBA can also allocate more space for a Database by adding a datafile to a tablespace or adding a new tablespace or simply increasing the size of a datafile.

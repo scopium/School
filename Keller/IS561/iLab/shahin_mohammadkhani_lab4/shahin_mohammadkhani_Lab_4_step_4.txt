@@ -1,0 +1,2 @@
+STEP4
+we couldnt create a new table in the tablespace RONLY that was in read only because simply we took the write privileges from it. All we could do is query from the tablespace. dropping table is allowed since the table was not in use and not updates are being done to it.

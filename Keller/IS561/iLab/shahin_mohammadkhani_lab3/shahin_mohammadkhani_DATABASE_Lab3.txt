@@ -1,0 +1,200 @@
+                       
+SQL> SELECT * FROM V$CONTROLFILE;
+
+STATUS                                                                          
+-------                                                                         
+NAME                                                                            
+--------------------------------------------------------------------------------
+IS_ BLOCK_SIZE FILE_SIZE_BLKS                                                   
+--- ---------- --------------                                                   
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\CTL1002.CTL                       
+NO       16384            422                                                   
+                                                                                
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\CTL2002.CTL                       
+NO       16384            422                                                   
+
+STATUS                                                                          
+-------                                                                         
+NAME                                                                            
+--------------------------------------------------------------------------------
+IS_ BLOCK_SIZE FILE_SIZE_BLKS                                                   
+--- ---------- --------------                                                   
+                                                                                
+
+SQL> SHUTDOWN IMMEDIATE;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+
+SQL> STARTUP PFILE= O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+Database opened.
+SQL> SELECT NAME FROM V$CONTROLFILE;
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\CTL1002.CTL                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\CTL2002.CTL                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\CTLTEST3.CTL                      
+
+SQL> SHUTDOWN IMMEDIATE;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP PFILE = O:\DB809\ORACLE\ADMIN\PFILE\INITDB809.ORA;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+ORA-00205: error in identifying control file, check alert log for more info 
+
+
+SQL> SHUTDOWN IMMEDIATE;
+ORA-01507: database not mounted 
+
+
+ORACLE instance shut down.
+SQL> STARTUP PFILE = O:\DB809\ORACLE\ADMIN\PFILE\INITDB809.ORA;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+Database opened.
+SQL> SELECT MEMBER FROM V$LOGFILE;
+
+MEMBER                                                                          
+--------------------------------------------------------------------------------
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG1A01.RDO                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\LOG2A01.RDO                       
+
+SQL> SELECT * FROM V$LOG;
+
+    GROUP#    THREAD#  SEQUENCE#      BYTES    MEMBERS ARC STATUS               
+---------- ---------- ---------- ---------- ---------- --- ----------------     
+FIRST_CHANGE# FIRST_TIM                                                         
+------------- ---------                                                         
+         1          1        401    4194304          1 NO  CURRENT              
+      1131907 22-JAN-12                                                         
+                                                                                
+         2          1        400    4194304          1 NO  INACTIVE             
+      1124994 22-JAN-12                                                         
+                                                                                
+
+
+SQL> SELECT MEMBERS,GROUP# FROM V$LOG;
+
+   MEMBERS     GROUP#                                                           
+---------- ----------                                                           
+         1          1                                                           
+         1          2                                                           
+
+
+
+
+SQL> SELECT LOG_MODE FROM V$DATABASE;
+
+LOG_MODE                                                                        
+------------                                                                    
+NOARCHIVELOG                                                                    
+
+
+
+
+SQL> SELECT * FROM V$INSTANCE;
+
+INSTANCE_NUMBER INSTANCE_NAME                                                   
+--------------- ----------------                                                
+HOST_NAME                                                                       
+----------------------------------------------------------------                
+VERSION           STARTUP_T STATUS       PAR    THREAD# ARCHIVE LOG_SWITCH_WAIT 
+----------------- --------- ------------ --- ---------- ------- --------------- 
+LOGINS     SHU DATABASE_STATUS   INSTANCE_ROLE      ACTIVE_ST BLO               
+---------- --- ----------------- ------------------ --------- ---               
+              1 db809                                                           
+DC1-W-ILOR603P                                                                  
+10.2.0.1.0        22-JAN-12 OPEN         NO           1 STOPPED                 
+ALLOWED    NO  ACTIVE            PRIMARY_INSTANCE   NORMAL    NO                
+                                                                                
+
+SQL> SELECT ARCHIVER FROM V$INSTANCE;
+
+ARCHIVE                                                                         
+-------                                                                         
+STOPPED                                                                         
+
+
+SQL> ALTER DATABASE ADD LOGFILE MEMBER'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG1BO1.RDO' TO GROUP 1;
+
+Database altered.
+
+SQL> ALTER DATABASE ADD LOGFILE MEMBER 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\LOG1BO1.RDO' TO GROUP 1;
+
+Database altered.
+
+SQL> ALTER DATABASE ADD LOGFILE MEMBER 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG2B01.RDO' TO GROUP 2;
+
+Database altered. 
+
+
+SQL> SELECT GROUP#, STATUS, MEMBER FROM V$LOGFILE;
+
+    GROUP# STATUS                                                               
+---------- -------                                                              
+MEMBER                                                                          
+--------------------------------------------------------------------------------
+         1                                                                      
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG1A01.RDO                       
+                                                                                
+         2                                                                      
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\LOG2A01.RDO                       
+                                                                                
+         1 INVALID                                                              
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG1BO1.RDO                       
+                                                                                
+
+    GROUP# STATUS                                                               
+---------- -------                                                              
+MEMBER                                                                          
+--------------------------------------------------------------------------------
+         1 INVALID                                                              
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\LOG1BO1.RDO                       
+                                                                                
+         2 INVALID                                                              
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK2\LOG2B01.RDO                       
+                                                                                
+
+
+SQL> ALTER DATABASE ADD LOGFILE GROUP 3 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK4\LOG3A04.RDO' SIZE 4M;
+
+Database altered.
+
+SQL> ALTER DATABASE ADD LOGFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK5\LOG3B01.RDO' SIZE 4M;
+
+Database altered.
+
+SQL> SELECT GROUP#, MEMBERS FROM V$LOG;
+
+    GROUP#    MEMBERS                                                           
+---------- ----------                                                           
+         1          3                                                           
+         2          2                                                           
+         3          1                                                           
+         4          1                                                           
+
+SQL> SPOOL OFF;

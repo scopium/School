@@ -1,0 +1,10 @@
+1. SELECT First_Name, Last_Name from Student;
+2. SELECT DISTINCT Major FROM Student;
+3. SELECT First_Name, Last_Name FROM Student WHERE Zip='88888';
+4. SELECT First_Name, Last_Name FROM Student WHERE Zip='88888' AND Major='Biology';
+5. SELECT First_Name, Last_Name FROM Student WHERE Zip='88888' OR Zip='88808';
+6. SELECT First_Name, Last_Name FROM Student WHERE Major IN ('Biology','Math');
+7.  SELECT First_Name, Last_Name FROM Student WHERE Status BETWEEN 2 AND 9;
+8. SELECT First_Name, Last_Name FROM Student WHERE Last_Name LIKE 'S*';
+9. SELECT First_Name,Last_Name FROM Student WHERE First_Name LIKE '_a*';
+10.SELECT sum(Status) as SumOfStatus FROM Student;

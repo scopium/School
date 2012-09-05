@@ -1,0 +1,1 @@
+Sun Jan 22 19:04:14 2012ORA-00202: control file: 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\CTLTEST3.CTL'ORA-27047: unable to read the header block of fileOSD-04001: invalid logical block size (OS 541073440)

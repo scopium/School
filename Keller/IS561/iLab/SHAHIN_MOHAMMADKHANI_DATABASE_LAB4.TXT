@@ -1,0 +1,312 @@
+SQL> CREATE TABLESPACE INDX01
+  2  DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\indx01.dbf' SIZE 1M
+  3  EXTENT MANAGEMENT DICTIONARY
+  4  DEFAULT STORAGE (Initial 16K
+  5  NEXT 16K
+  6  PCTINCREASE 0
+  7  MINEXTENTS 1
+  8  MAXEXTENTS 100);
+
+Tablespace created.
+
+SQL> 
+SQL> DROP TABLESPACE INDX01;
+
+Tablespace dropped.
+
+SQL> CREATE TABLESPACE INDX01
+  2  DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\indx01.dbf' SIZE 1M
+  3  EXTENT MANAGEMENT DICTIONARY
+  4  DEFAULT STORAGE (Initial 16K
+  5  NEXT 16K
+  6  PCTINCREASE 0
+  7  MINEXTENTS 1
+  8  MAXEXTENTS 100);
+
+Tablespace created.
+
+SQL> CREATE TABLESPACE USERS01
+  2  DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\users01.dbf' SIZE 2M
+  3  EXTENT MANAGEMENT DICTIONARY
+  4  DEFAULT STORAGE (Initial 16K
+  5  NEXT 16K
+  6  PCTINCREASE 0
+  7  MINEXTENTS 1
+  8  MAXEXTENTS 100);
+
+Tablespace created.
+
+SQL> CREATE TABLESPACE RONLY
+  2  DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\ronly.dbf' SIZE 1M
+  3  EXTENT MANAGEMENT DICTIONARY
+  4  DEFAULT STORAGE (Initial 16K
+  5  NEXT 16K
+  6  PCTINCREASE 0
+  7  MINEXTENTS 1
+  8  MAXEXTENTS 100);
+
+Tablespace created.
+
+SQL> CREATE TEMPORARY TABLESPACE TEMP01
+  2  TEMPFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\temp01.deb' SIZE 1M
+  3  REUSE EXTENT MANAGEMENT LOCAL UNIFORM SIZE 512K;
+
+Tablespace created.
+
+
+SQL> SELECT FILE_NAME, FILE_ID, TABLESPACE_NAME FROM DBA_DATA_FILES;
+
+FILE_NAME                                                                       
+--------------------------------------------------------------------------------
+   FILE_ID TABLESPACE_NAME                                                      
+---------- ------------------------------                                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSTEM01.DBF                      
+         1 SYSTEM                                                               
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\INDX01.DBF                        
+         3 INDX01                                                               
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF                       
+         4 USERS01                                                              
+                                                                                
+
+FILE_NAME                                                                       
+--------------------------------------------------------------------------------
+   FILE_ID TABLESPACE_NAME                                                      
+---------- ------------------------------                                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\RONLY.DBF                         
+         5 RONLY                                                                
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSAUX01.DBF                      
+         2 SYSAUX                                                               
+                                                                                
+
+SQL> SELECT TABLESPACE_NAME, BYTES, BLOCKS, STATUS FROM DBA_DATA_FILES;
+
+TABLESPACE_NAME                     BYTES     BLOCKS STATUS                     
+------------------------------ ---------- ---------- ---------                  
+SYSTEM                          198238208      24199 AVAILABLE                  
+INDX01                            1048576        128 AVAILABLE                  
+USERS01                           2097152        256 AVAILABLE                  
+RONLY                             1048576        128 AVAILABLE                  
+SYSAUX                          157286400      19200 AVAILABLE                  
+
+SQL> ALTER TABLESPACE INDX01 OFFLINE NORMAL;
+
+Tablespace altered.
+
+
+
+SQL> SELECT FILE_NAME, STATUS FROM DBA_DATA_FILES;
+
+FILE_NAME                                                                       
+--------------------------------------------------------------------------------
+STATUS                                                                          
+---------                                                                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSTEM01.DBF                      
+AVAILABLE                                                                       
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\INDX01.DBF                        
+AVAILABLE                                                                       
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF                       
+AVAILABLE                                                                       
+                                                                                
+
+FILE_NAME                                                                       
+--------------------------------------------------------------------------------
+STATUS                                                                          
+---------                                                                       
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\RONLY.DBF                         
+AVAILABLE                                                                       
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSAUX01.DBF                      
+AVAILABLE                                                                       
+                                                                                
+
+SQL> SELECT NAME, STATUS FROM V$DATAFILE;
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+STATUS                                                                          
+-------                                                                         
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSTEM01.DBF                      
+SYSTEM                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSAUX01.DBF                      
+ONLINE                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\INDX01.DBF                        
+OFFLINE                                                                         
+                                                                                
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+STATUS                                                                          
+-------                                                                         
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF                       
+ONLINE                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\RONLY.DBF                         
+ONLINE                                                                          
+                                                                                
+
+
+SQL> ALTER TABLESPACE INDX01
+  2  RENAME DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK3\INDX01.DBF'
+  3  TO 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK5\INDX01.DBF';
+
+Tablespace altered.
+
+
+
+SQL> ALTER TABLESPACE INDX01 ONLINE;
+
+Tablespace altered.
+
+SQL> SELECT NAME, STATUS FROM V$DATAFILE;
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+STATUS                                                                          
+-------                                                                         
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSTEM01.DBF                      
+SYSTEM                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSAUX01.DBF                      
+ONLINE                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK5\INDX01.DBF                        
+ONLINE                                                                          
+                                                                                
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+STATUS                                                                          
+-------                                                                         
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF                       
+ONLINE                                                                          
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\RONLY.DBF                         
+ONLINE                                                                          
+                                                                                
+
+SQL> SELECT TS#, NAME FROM V$TABLESPACE;
+
+       TS# NAME                                                                 
+---------- ------------------------------                                       
+         0 SYSTEM                                                               
+         1 SYSAUX                                                               
+         3 INDX01                                                               
+         4 USERS01                                                              
+         5 RONLY                                                                
+         6 TEMP01                                                               
+
+6 rows selected.
+
+
+SQL> CREATE TABLE T1(
+  2  T1# NUMBER(1))
+  3  TABLESPACE RONLY;
+
+Table created.
+
+SQL> ALTER TABLESPACE RONLY READ ONLY;
+
+Tablespace altered.
+
+SQL> SELECT NAME, ENABLED, STATUS FROM V$DATAFILE;
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+ENABLED    STATUS                                                               
+---------- -------                                                              
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSTEM01.DBF                      
+READ WRITE SYSTEM                                                               
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\SYSAUX01.DBF                      
+READ WRITE ONLINE                                                               
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK5\INDX01.DBF                        
+READ WRITE ONLINE                                                               
+                                                                                
+
+NAME                                                                            
+--------------------------------------------------------------------------------
+ENABLED    STATUS                                                               
+---------- -------                                                              
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\USERS01.DBF                       
+READ WRITE ONLINE                                                               
+                                                                                
+F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK1\RONLY.DBF                         
+READ ONLY  ONLINE                                                               
+                                                                                
+
+
+SQL> CREATE TABLE T2 (T2 NUMBER(1)) TABLESPACE RONLY;
+CREATE TABLE T2 (T2 NUMBER(1)) TABLESPACE RONLY
+*
+ERROR at line 1:
+ORA-01647: tablespace 'RONLY' is read only, cannot allocate space in it 
+
+
+SQL> DROP TABLE T1;
+
+Table dropped.
+
+SQL> DROP TABLESPACE RONLY INCLUDING CONTENTS;
+
+Tablespace dropped.
+
+SQL> SELECT TS#, NAME FROM V$TABLESPACE;
+
+       TS# NAME                                                                 
+---------- ------------------------------                                       
+         0 SYSTEM                                                               
+         1 SYSAUX                                                               
+         3 INDX01                                                               
+         4 USERS01                                                              
+         6 TEMP01                                                               
+
+SQL> SHOW PARAMETER UNDO;
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+undo_management                      string      MANUAL                         
+undo_retention                       integer     900                            
+undo_tablespace                      string                                     
+SQL> SHUTDOWN IMMEDIATE;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP PFILE = O:\DB809\ORACLE\ADMIN\PFILE\INITDB809.ORA;
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+Database opened.
+SQL> SHOW PARAMETER UNDO
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+undo_management                      string      AUTO                           
+undo_retention                       integer     900                            
+undo_tablespace                      string                                     
+SQL> CREATE UNDO TABLESPACE UNDOTBS
+  2       DATAFILE 'F:\DBM\FALLB\DB809\ORACLE\ADMIN\ORADATA\DISK4\UNDOTBS.deb' SIZE 2M REUSE AUTOEXTEND ON;
+
+Tablespace created.
+
+SQL> 
+SQL> SHOW PARAMETER UNDO;
+
+NAME                                 TYPE        VALUE                          
+------------------------------------ ----------- ------------------------------ 
+undo_management                      string      AUTO                           
+undo_retention                       integer     900                            
+undo_tablespace                      string      UNDOTBS                        
+SQL> SPOOL OFF;

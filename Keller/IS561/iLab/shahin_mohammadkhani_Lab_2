@@ -1,0 +1,89 @@
+**** Step 1 ****
+
+**** Step 2 ****
+
+# Cache and I/0
+db_block_size = 4096
+db_domain = detroit.usa
+remote_login_passwordfile = exclusive
+control_files = (D:\newlogs\control199.ct1)
+maxinstances=2
+compatible = 9.0.1
+
+#Database Name
+db_name = prod901
+instance_name = trial02
+
+*** Step 3 ***
+O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora
+
+SQL> SHUTDOWN IMMEDIATE
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP NOMOUNT PFILE= O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+SQL> SHUTDOWN IMMEDIATE
+ORA-01507: database not mounted 
+
+
+ORACLE instance shut down.
+SQL> STARTUP MOUNT PFILE=O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+SQL> SHUTDOWN IMMEDIATE
+ORA-01109: database not open 
+
+
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP PFILE=O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+Database mounted.
+Database opened.
+SQL> SHUTDOWN IMMEDIATE
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> STARTUP NOMOUNT PFILE=O:\DB809\ORACLE\ADMIN\pfile\initDB809.ora
+ORACLE instance started.
+
+Total System Global Area  104857600 bytes                                       
+Fixed Size                  2002272 bytes                                       
+Variable Size              92275360 bytes                                       
+Database Buffers            8388608 bytes                                       
+Redo Buffers                2191360 bytes                                       
+SQL> ALTER DATABASE MOUNT;
+
+Database altered.
+
+SQL> ALTER DATABASE OPEN
+  2  ;
+
+Database altered.
+
+SQL> SELECT STATUS FROM V$INSTANCE;
+
+STATUS                                                                          
+------------                                                                    
+OPEN                                                                            
+
+SQL> SPOOL OFF

@@ -1,0 +1,255 @@
+10/25/2011 - Notes
+
+	* Project: You can pick one or work solo.
+    
+    Week 1: Intro to DB/ History - Ch 1
+    Week 2: Relational Model / Normalization Ch 3-4
+    Week 3: Data Modeling / 2 Notation Ch 5
+    Week 4: Design  Ch 6
+    Week 5: SQL Ch 2
+    Week 6: App Using SQL
+    Week 7:
+
+
+    *- Chapter 1 -*
+    
+    * Characteristics of Databases
+        * The purpose of a database is to help people track things of interest
+            to them.
+        * Data is stored in tables, which have rows and columns like a
+            spreadsheet. A database may have multiple tables.
+    * Why Use a Database
+        * To help people and organizations keep track of things.
+        * Decrease storage requirements
+        * Retreive data quickly and effectively
+        * Manipulate data easily    
+        * Increase accuracy
+        * Increase company productivity
+        * Increase data consistency
+        * Secure data
+    * Naming Conventions in this Textbook
+            
+    * Database Examples
+        * Single*User Database
+        * Multiuser Database
+        * E*Commerce Database Applications
+        * Reporting and Data Mining Database Applications
+
+    * Components of a Database system.
+        * Users <-> Database Application <-> DBMS(create, process, administer) <-> Database
+
+    * Components of a Database system with Sql
+        * Users <-> Database Application <-> SQL <-> DBMS(create, process, administer) <-> Database
+
+    * Applications, the DBMS, and SQL
+        * Applications are the computer programs that users work with.
+        * The Database Managements System creates, processes, and administers dbs.
+        * Structured Query Language is an internationally recognized standard database language that
+           is used by all commercial DBMSs
+        * DML - select, insert, update, delete
+        * DDL - create, alter, drop
+
+    * Database Applications
+        * Create and process forms
+        * Process user queries
+        * Create and process reports
+        * Execute application logic
+        * Control application
+
+    * The DBMS
+        * Create database
+        * Create tables
+        * Create supporting structures (e.g indexes)
+        * Read database data
+        * Modify (insert, update, or delete) database data
+        * Maintain database structures
+        * Enforce rules
+        * Control concurrency
+        * Provide security
+        * Peform backup and recovery
+
+    * The Database
+        * A database is a self-describing collection on integrated tables
+        * The tables are called integrated because they store data about the relationships
+          between the rows of data.
+        * A database is called self-describing because it stores a description of itself.
+        * The self-describing data is called metadata, which is data about.
+
+    * Three Types of Database Design Situations 
+        * Database Design p.16
+            * From Existing Data
+            * New systems Development
+            * Database Redesign
+
+11/01/2011 - Notes
+    
+    *- Chapter 3 -*
+    
+    The Relational Model and Normalization
+    
+    * The relational model
+        * Introduced in 1970
+        * Created by E.F Codd
+            - He was an IBM Engineer
+            - The model used mathematics know as "relational algebra"
+        * Now the standard model for commercial DBMS products.
+    * Important Relational Model Terms
+        * Entity
+        * Relation
+        * Functiona Dependency
+        * Determinant 
+        * Candidate key
+        * Composite key
+        * Primary key
+        * Surrogate key
+        * Foreign key
+        * Referential integrity constraint
+        * Normal form
+        * Multivalued dependency
+
+    * Entity
+        * An entity is some identifiable thing that users want to track:
+            - Customers
+            - Computers
+            - Sales
+    * Relation
+        * a relation is a two-dimensional table that has the following characteristics:
+            - Rows contain data about an entity
+            - Columns contain data about attributes of the entity
+            - All entries in a column are of the same kind
+            - Each column has a unique name
+            - Cells of the table hod a single value
+            - The order of the columns is unimportant.
+            - The order of the rows is unimportant
+            - No two rows may be identical.
+    * Alternative Terminology
+        * ALthough not all tables are relations, the terms /table/ and /relation/
+          are normally used interchangeably.
+        * The following sets of terms are equivalent:
+            - Table + Relation + File
+            - Column + Attribute + Field
+            _ Row + Tuple + Record
+    * Keys
+        * A key is a combination of one or more columns that is used to identify rows in 
+           a relation.
+        * A composite key is a key that consists of two or more columns.
+          
+    * Candidate Keys (Key)
+        * A candidate key is a key that determines all of the other columns in a relation.
+        * A primary key is a condidate key selected as the primary means of idetifying rows 
+          in a relation.
+            - The is only one primary key per relation.
+            - The primary key may be a composite key.
+            - The ideal primary key is short, numeric and never changes.
+        * An alternate key is another candiate key selected as a unique way of identifying rows
+          in a relation.
+
+    * Surrogate Keys
+        * A surrogate key is an artificial column added to a relation to serve as a primary key.
+            - DBMS supplied
+            - Short, numeric, and never changes -- an ideal primary key.
+            - Has artificial values that are meaningless to users
+            - Normally hidden in forms and reports
+    * Foreign Keys
+        * A foreign key is the primary of one relation that is placed in another relation to
+         form a link between relations.
+    * The Referential Integrity Constraint
+        * A referential integrity constraint is a statement that limits the values of the
+          foreign key to those already existing as primary key values in the corresponding
+          relation.
+
+    * Functional Dependency
+        * a functional dependency occurs when the value of one (set of) attributes determines the value
+         of a second set of attributes.
+        * The attribute of the left side of the functional dependency is called |determinant|
+    
+    * What makes determinant values unique?
+        * A determinant is unique in a relation if and only if, it determines every other
+         column in the relation.
+        * You can not find the determinant of all functional dependencies simply by looking for unique values
+          in one column:
+            - Date set limitations
+            - Must be logically a determinant.
+
+
+    * Normalization - pg.108
+    
+    * Normal Forms
+        * 1NF -  a table that qualifies as a relation is in 1NF.
+        * 2NF - a relation is in 2NF if all of its non-key attributes are dependent on all of the PK.
+        * 3NF - a relation is in 3NF if it is in 2NF and has no determinants except the primary key.
+            * All determinants are PK
+        * Boyce-Codd Normal form (BCNF)  -  relation is in BCNF if every determinant is a candidate key.
+
+############# FUNCTIONAL DEPENDENCIES  Normalization ############
+    * FOR ALL FUNCTIONAL DEPENDENCIES DETERMINANTS NOT a candidate key 
+        * move all columns FD into a new column
+        * New table - determinant is pk
+        * Original table determinant FK
+
+    * Choosing Not To Use BCNF
+        * BCNF is used to control anomalies from functional dependencies
+        * There are times when BCNF is not desirable.
+        * The classic example are Zip codes:
+            - ZIP codes almost never change.
+            - Any anomalies are likely to be caught by normal business practices
+            - Not having to use SQL to join data in two tables will speed up application processing.
+
+11/08/2011 - Notes
+    
+    * Data Modeling with Entity-Relationship Model - Chap 5
+    
+    * A data model is a plan or blueprint for a database design.
+    * a data model is more generalized and abstract than a database.
+    * It is easier to change a data model then it is to change a database, so it is the
+      appropriate place to work through conceptual database problems.
+
+    * Views of Database.
+        - External
+        - Conceptual
+        - Internal view (Physical View)
+
+    * E-R Model (Entity-Relationship model) is a set of concepts and graphical symbol that can be
+    used to create conceptual schemas.
+
+    * Entities
+        * Something that can be identified and the users want to track:
+            - Entity class - a collection of entities of a given type
+            - Entity instance - the occurrence of a particular entity.
+        * There are usually many instances of an entity in any entity class.
+    * Entity vs Tables
+        * Tables have relationship
+        * Entity is a logical representation of an table
+        * Relationships are built between entities which eventually become tables.
+
+    * Cardinality
+        * Cardinality means 'count' and is expressed as a number
+    * Maximum Cardinality is the maximum number of entity instances than can participate in a relationship
+    * There are three types of maximum cardinality:
+        - 1-1
+        - 1-M
+        - M-M
+        * Parent and Child Entities
+            * One to many relationships
+    * Minimum Cardinality
+        * the number of entity instances that must participate in a relationship ( whats the minimum number of instances
+        that i must have to be in a relationship)
+    * (---) between two entities mean that they are not ID dependant
+    * (solid line) between two entities mean the entities are ID dependant. Meaning the relationship needs a parent
+
+    * Subtype Entities
+        * A subtype entity is a special case of supertype entity:
+            - STUDENT:
+                    UNDERGRADUATE or GRADUATE
+            - The supertype contains all common attributes, while te subtypes contain specific attributes.
+
+    * Specifying Relationships
+        * Includes
+            - Identity of the parent and child entities
+            - Relationship type
+            - Minimum and maximum cardinalities
+            - name of the realtionships
+            - Two techiques:
+                - Examine whether a relationship exists between every combination of two entities
+                - locate relationships from requirements
+            - A combinate of the wo approaches      

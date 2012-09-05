@@ -1,0 +1,224 @@
+SQL> CREATE TABLE S_DEPT
+  2  ( DEPTNO number(2) not null,
+  3  DNAME varchar2(14),
+  4  LOC char(13),
+  5  CONSTRAINT SDEPT_DEPTNO_PK PRIMARY KEY (DEPTNO)
+  6  ) TABLESPACE USERS01;
+
+Table created.
+
+SQL> CREATE TABLE S_EMP
+  2  ( EMPNO number(4) not null,
+  3   ENAME varchar2(10),
+  4   JOB  varchar2(9),
+  5   MGR  varchar2(9),
+  6   HIREDATE date,
+  7   SALE number(7,2),
+  8   COMM number(7,2),
+  9   DEPTNO number(2),
+ 10   CONSTRAINT SEMP_EMPNO_PK PRIMARY KEY (EMPNO),
+ 11   CONSTRAINT DEPTNO_EMPNO_FK FOREIGN KEY (DEPTNO) REFERENCES S_DEPT(DEPTNO)
+ 12  )TABLESPACE USERS01;
+
+Table created.
+
+SQL> Select TABLE_NAME, TABLESPACE_NAME FROM DBA_TABLES WHERE TABLE_NAME IN('S_DEPT','S_EMP');
+
+TABLE_NAME                     TABLESPACE_NAME                                  
+------------------------------ ------------------------------                   
+S_EMP                          USERS01                                          
+S_DEPT                         USERS01                                          
+
+SQL> INSERT INTO S_DEPT VALUES (12,'IT','LOS ANGELES');
+
+1 row created.
+
+SQL> INSERT INTO S_EMP VALUES (1234,'SHAHIN','SALES','JASON',TO_DATE('12-03-2011', 'DD-MM-YYYY'),12345.45,3456.78,12);
+
+1 row created.
+
+SQL> INSERT INTO S_EMP VALUES (234,'JAMES','SALES','MIKE',TO_DATE('12-03-2010', 'DD-MM-YYYY'),12345.45,3456.78,11);
+INSERT INTO S_EMP VALUES (234,'JAMES','SALES','MIKE',TO_DATE('12-03-2010', 'DD-MM-YYYY'),12345.45,3456.78,11)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (SYS.DEPTNO_EMPNO_FK) violated - parent key not 
+found 
+
+
+SQL> SELECT TABLE_NAME, INITIAL_EXTENT, NEXT_EXTENT, MAX_EXTENTS, PCT_INCREASE
+  2  FROM DBA_TABLES WHERE TABLE_NAME IN ('S_EMP','S_DEPT');
+
+TABLE_NAME                     INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+S_EMP                                   16384       16384         100           
+           0                                                                    
+                                                                                
+S_DEPT                                  16384       16384         100           
+           0                                                                    
+                                                                                
+
+SQL> SELECT TABLESPACE_NAME, INITIAL_EXTENT, NEXT_EXTENT,MAX_EXTENTS,PCT_INCREASE
+  2  FROM DBA_TABLESPACES WHERE TABLESPACE_NAME = 'USERS01';
+
+TABLESPACE_NAME                INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+USERS01                                 16384       16384         100           
+           0                                                                    
+                                                                                
+
+
+
+SQL> CREATE TABLE S_ITEM
+  2  ( ITEMNO NUMBER(2) NOT NULL,
+  3   DESCRIPTION VARCHAR2(20),
+  4   PRICE NUMBER(7,2),
+  5   CONSTRAINT SITEM_ITEMNO_PK PRIMARY KEY (ITEMNO)
+  6   ) TABLESPACE USERS01
+  7   STORAGE(
+  8   INITIAL 512K
+  9   NEXT 512K
+ 10   PCTINCREASE 0
+ 11   MAXEXTENTS 100);
+
+Table created.
+
+SQL> SELECT TABLE_NAME, INITIAL_EXTENT, NEXT_EXTENT,MAX_EXTENTS,PCT_INCREASE
+  2  FROM DBA_TABLES WHERE TABLE_NAME IN ('S_EMP','S_DEPT','S_ITEM');
+
+TABLE_NAME                     INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+S_ITEM                                 524288      524288         100           
+           0                                                                    
+                                                                                
+S_DEPT                                  16384       16384         100           
+           0                                                                    
+                                                                                
+S_EMP                                   16384       16384         100           
+           0                                                                    
+                                                                                
+
+SQL> INSERT INTO S_DEPT VALUES (10,'ACCOUNTING','NEW YORK');
+
+1 row created.
+
+SQL> INSERT INTO S_DEPT VALUES (20,'RESEARCH','DALLAS');
+
+1 row created.
+
+SQL> INSERT INTO S_DEPT VALUES (30,'SALES','CHICAGO');
+
+1 row created.
+
+SQL> INSERT INTO S_DEPT VALUES (40,'OPERATIONS','BOSTON');
+
+1 row created.
+
+SQL> CREATE TABLE G_DEPT AS SELECT * FROM S_DEPT;
+
+Table created.
+
+SQL> SELECT * FROM G_DEPT;
+
+    DEPTNO DNAME          LOC                                                   
+---------- -------------- -------------                                         
+        12 IT             LOS ANGELES                                           
+        10 ACCOUNTING     NEW YORK                                              
+        20 RESEARCH       DALLAS                                                
+        30 SALES          CHICAGO                                               
+        40 OPERATIONS     BOSTON                                                
+
+SQL> SELECT TABLE_NAME, INITIAL_EXTENT, NEXT_EXTENT,MAX_EXTENTS,PCT_INCREASE
+  2  FROM DBA_TABLES WHERE TABLE_NAME IN ('S_EMP','S_DEPT','S_ITEM',G_ITEM');
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT TABLE_NAME, INITIAL_EXTENT, NEXT_EXTENT,MAX_EXTENTS,PCT_INCREASE
+  2  FROM DBA_TABLES WHERE TABLE_NAME IN ('S_EMP','S_DEPT','S_ITEM','G_ITEM');
+
+TABLE_NAME                     INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+S_ITEM                                 524288      524288         100           
+           0                                                                    
+                                                                                
+S_DEPT                                  16384       16384         100           
+           0                                                                    
+                                                                                
+S_EMP                                   16384       16384         100           
+           0                                                                    
+                                                                                
+
+SQL> SELECT TABLE_NAME, INITIAL_EXTENT, NEXT_EXTENT,MAX_EXTENTS,PCT_INCREASE
+  2  FROM DBA_TABLES WHERE TABLE_NAME IN ('S_EMP','S_DEPT','S_ITEM','G_DEPT');
+
+TABLE_NAME                     INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+G_DEPT                                  16384       16384         505           
+          50                                                                    
+                                                                                
+S_ITEM                                 524288      524288         100           
+           0                                                                    
+                                                                                
+S_DEPT                                  16384       16384         100           
+           0                                                                    
+                                                                                
+
+TABLE_NAME                     INITIAL_EXTENT NEXT_EXTENT MAX_EXTENTS           
+------------------------------ -------------- ----------- -----------           
+PCT_INCREASE                                                                    
+------------                                                                    
+S_EMP                                   16384       16384         100           
+           0                                                                    
+                                                                                
+
+
+
+SQL> ALTER TABLE S_DEPT
+  2  ADD (LOCATION_PIC BLOB);
+
+Table altered.
+
+
+SQL> ALTER TABLE S_DEPT
+  2  RENAME COLUMN LOC TO LOCATION;
+
+Table altered.
+
+SQL> ALTER TABLE S_DEPT
+  2  MODIFY( LOCATION VARCHAR2(30));
+
+Table altered.
+
+SQL> CREATE BITMAP INDEX LOC_BM_IDX ON S_DEPT(LOCATION);
+
+Index created.
+
+SQL> DESC S_DEPT;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPTNO                                    NOT NULL NUMBER(2)
+ DNAME                                              VARCHAR2(14)
+ LOCATION                                           VARCHAR2(30)
+ LOCATION_PIC                                       BLOB
+
+
+
+SQL> select INDEX_NAME,TABLE_NAME from DBA_INDEXES where table_name='S_DEPT';
+
+INDEX_NAME                     TABLE_NAME                                       
+------------------------------ ------------------------------                   
+SDEPT_DEPTNO_PK                S_DEPT                                           
+LOC_BM_IDX                     S_DEPT                                           
+
+
+SQL> spool off;

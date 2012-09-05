@@ -1,0 +1,71 @@
+
+1. TCO A: A database is considered "self-describing" because _____. (Points : 2) 
+      * it contains a description of its own structure
+       it contains a listing of all the programs that use it
+       it reduces data duplication
+       all the users' data is in one place
+
+2. TCO A: Business organizations have resisted adopting object-oriented database management systems because _____.
+A) the cost of purchasing OODBMS packages is prohibitively high
+B) object-oriented programming uses simplified data structures that fit easily into relational databases
+C) the cost of converting data from relational databases to OODBMSs is too high
+D) most large organizations have older applications that are not based on object-oriented programming
+
+(Points : 2) 
+       A
+       B
+       C
+       D
+      * Both C and D
+
+3. TCO C: A table that meets the definition of a relation is in _____. (Points : 2) 
+       Third Normal Form
+       Fourth Normal Form
+       Boyce-Codd Normal Form
+       Second Normal Form
+      * First Normal Form
+
+4. TCO C: A tuple is also known as a _____. (Points : 2) 
+       table
+       relation
+       file
+      * row
+       field
+
+5. TCO C: An attribute is also known as a _____. (Points : 2) 
+       relation
+       file
+      * field
+       table
+       row
+
+
+6. TCO A: What are the three types of database design situations?  (Points : 10) 
+
+Database constructed from existing data: Team is required to design an database based on the data given in a spreadsheet or other tables. Extracting data from other databases for other use. Design using normalization principles.
+
+Database Design for New Systems Development:  Required to create a new data model from application requirements and transform data model into database design such as forms and reports.
+
+Database Redesign: Where we migrate databases to newer database because of business requirements or process. We can also Integrate two or more databases together because it can optimize process. Also we can Reverse engineer and design new databases using normalization principles and data model transformation
+
+
+
+7. TCO A:  Explain why a small database is not necessarily simpler than a large one. (Points : 10) 
+
+Because the difference between a small database and a large database is really mostly the data that is being entered into it.  For example a small shipping company ships 1 million packages a year where a larger company can ship 100 million packages.  Even though their quantity are different they stil share the same business model , same kind of data and same kind of logic and levels of complexity.  The same amount of complexity applies to both. Thus just because a database is smaller does not make it simpler.
+
+
+
+8. TCO C: What are the advantages and disadvantages of normalization?  (Points : 10) 
+
+Lets keep it simple
+Advantages: First we reduce duplicate data which saves file space and data integrity problems. we also eliminate modification anomalies.
+
+Disadvantages: Queries are going to be longer and more complicated. We are gonna need to make joins between tables and even at times to subqueries which I'm not a big fan of.
+
+The more joins and subqueries to do, the more work we are putting on the DBMS which can slow the overall application down.
+
+Sometimes keeping your DB denormalized is better for business.
+
+
+

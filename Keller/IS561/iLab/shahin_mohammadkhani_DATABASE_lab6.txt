@@ -1,0 +1,834 @@
+SQL> CREATE USER bob
+  2      IDENTIFIED BY along
+  3      DEFAULT TABLESPACE users01
+  4      QUOTA 10M ON example
+  5      TEMPORARY TABLESPACE temp01
+  6      QUOTA 512K ON users01;
+    IDENTIFIED BY along
+                  *
+ERROR at line 2:
+ORA-01031: insufficient privileges 
+
+
+SQL>  conn system/manager@db809.world
+Connected.
+SQL> drop synonym product_user_profile;
+
+Synonym dropped.
+
+SQL> create table sqlplus_product_profile as
+  2    select product, userid, attribute, scope, numeric_value, char_value,
+  3    date_value from product_user_profile;
+create table sqlplus_product_profile as
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> 
+SQL> drop table product_user_profile;
+drop table product_user_profile
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> alter table sqlplus_product_profile add (long_value long);
+alter table sqlplus_product_profile add (long_value long)
+                                         *
+ERROR at line 1:
+ORA-01430: column being added already exists in table 
+
+
+SQL> create table sqlplus_product_profile
+  2  (
+  3    product        varchar2 (30) not null,
+  4    userid         varchar2 (30),
+  5    attribute      varchar2 (240),
+  6    scope          varchar2 (240),
+  7    numeric_value  decimal (15,2),
+  8    char_value     varchar2 (240),
+  9    date_value     date,
+ 10    long_value     long
+ 11  );
+create table sqlplus_product_profile
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> drop view product_privs;
+
+View dropped.
+
+SQL> create view product_privs as
+  2    select product, userid, attribute, scope,
+  3           numeric_value, char_value, date_value, long_value
+  4    from sqlplus_product_profile
+  5    where userid = 'PUBLIC' or user like userid;
+
+View created.
+
+SQL> grant select on product_privs to public;
+
+Grant succeeded.
+
+SQL> drop public synonym product_profile;
+
+Synonym dropped.
+
+SQL> create public synonym product_profile for system.product_privs;
+
+Synonym created.
+
+SQL> drop synonym product_user_profile;
+drop synonym product_user_profile
+             *
+ERROR at line 1:
+ORA-01434: private synonym to be dropped does not exist 
+
+
+SQL> create synonym product_user_profile for system.sqlplus_product_profile;
+
+Synonym created.
+
+SQL> drop public synonym product_user_profile;
+
+Synonym dropped.
+
+SQL> create public synonym product_user_profile for system.product_privs;
+
+Synonym created.
+
+SQL> conn sys/oracle@DB809.world as sysdba
+Connected.
+SQL> DROP USER SCOTT CASCADE;
+
+User dropped.
+
+SQL> 
+SQL> CREATE USER SCOTT IDENTIFIED BY TIGER
+  2  DEFAULT TABLESPACE USERS01
+  3  TEMPORARY TABLESPACE TEMP01
+  4  PROFILE DEFAULT;
+
+User created.
+
+SQL> GRANT CONNECT,RESOURCE,UNLIMITED TABLESPACE TO SCOTT IDENTIFIED BY TIGER;
+
+Grant succeeded.
+
+SQL> 
+SQL> CONNECT SCOTT/TIGER@DB809.WORLD
+Connected.
+SQL> CREATE TABLE DEPT
+  2         (DEPTNO NUMBER(2) CONSTRAINT PK_DEPT PRIMARY KEY,
+  3   DNAME VARCHAR2(14) ,
+  4   LOC VARCHAR2(13) ) ;
+
+Table created.
+
+SQL> CREATE TABLE EMP
+  2         (EMPNO NUMBER(4) CONSTRAINT PK_EMP PRIMARY KEY,
+  3   ENAME VARCHAR2(10),
+  4   JOB VARCHAR2(9),
+  5   MGR NUMBER(4),
+  6   HIREDATE DATE,
+  7   SAL NUMBER(7,2),
+  8   COMM NUMBER(7,2),
+  9   DEPTNO NUMBER(2) CONSTRAINT FK_DEPTNO REFERENCES DEPT);
+
+Table created.
+
+SQL> INSERT INTO DEPT VALUES
+  2   (10,'ACCOUNTING','NEW YORK');
+
+1 row created.
+
+SQL> INSERT INTO DEPT VALUES (20,'RESEARCH','DALLAS');
+
+1 row created.
+
+SQL> INSERT INTO DEPT VALUES
+  2   (30,'SALES','CHICAGO');
+
+1 row created.
+
+SQL> INSERT INTO DEPT VALUES
+  2   (40,'OPERATIONS','BOSTON');
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7369,'SMITH','CLERK',7902,to_date('17-12-2004','dd-mm-yyyy'),800,NULL,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7499,'ALLEN','SALESMAN',7698,to_date('20-2-2004','dd-mm-yyyy'),1600,300,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7521,'WARD','SALESMAN',7698,to_date('22-2-2004','dd-mm-yyyy'),1250,500,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7566,'JONES','MANAGER',7839,to_date('2-4-2005','dd-mm-yyyy'),2975,NULL,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7654,'MARTIN','SALESMAN',7698,to_date('28-9-2005','dd-mm-yyyy'),1250,1400,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7698,'BLAKE','MANAGER',7839,to_date('1-5-2004','dd-mm-yyyy'),2850,NULL,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7782,'CLARK','MANAGER',7839,to_date('9-6-2005','dd-mm-yyyy'),2450,NULL,10);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7788,'SCOTT','ANALYST',7566,to_date('13-7-2003','dd-mm-YYYY'),3000,NULL,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7839,'KING','PRESIDENT',NULL,to_date('17-11-2003','dd-mm-yyyy'),5000,NULL,10);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7844,'TURNER','SALESMAN',7698,to_date('8-9-2005','dd-mm-yyyy'),1500,0,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7876,'ADAMS','CLERK',7788,to_date('13-7-2003', 'dd-mm-YYYY'),1100,NULL,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7900,'JAMES','CLERK',7698,to_date('3-12-2002','dd-mm-yyyy'),950,NULL,30);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7902,'FORD','ANALYST',7566,to_date('3-12-2004','dd-mm-yyyy'),3000,NULL,20);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES
+  2  (7934,'MILLER','CLERK',7782,to_date('23-1-2005','dd-mm-yyyy'),1300,NULL,10);
+
+1 row created.
+
+SQL> CREATE TABLE BONUS
+  2   (
+  3   ENAME VARCHAR2(10),
+  4   JOB VARCHAR2(9),
+  5   SAL NUMBER,
+  6   COMM NUMBER
+  7   ) ;
+
+Table created.
+
+SQL> CREATE TABLE SALGRADE
+  2        ( GRADE NUMBER,
+  3   LOSAL NUMBER,
+  4   HISAL NUMBER );
+
+Table created.
+
+SQL> INSERT INTO SALGRADE VALUES (1,700,1200);
+
+1 row created.
+
+SQL> INSERT INTO SALGRADE VALUES (2,1201,1400);
+
+1 row created.
+
+SQL> INSERT INTO SALGRADE VALUES (3,1401,2000);
+
+1 row created.
+
+SQL> INSERT INTO SALGRADE VALUES (4,2001,3000);
+
+1 row created.
+
+SQL> INSERT INTO SALGRADE VALUES (5,3001,9999);
+
+1 row created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> CREATE USER bob
+  2      IDENTIFIED BY along
+  3      DEFAULT TABLESPACE users01
+  4      QUOTA 10M ON example
+  5      TEMPORARY TABLESPACE temp01
+  6      QUOTA 512K ON users01;
+    IDENTIFIED BY along
+                  *
+ERROR at line 2:
+ORA-01031: insufficient privileges 
+
+
+SQL> DROP USER SCOTT CASCADE;
+DROP USER SCOTT CASCADE
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> CREATE USER BOB IDENTIFIED BY ALONG
+  2  DEFAULT TABLESPACE USERS01
+  3  TEMPORARY TABLESPACE TEMP01
+  4  QUOTA 512K ON USERS01;
+CREATE USER BOB IDENTIFIED BY ALONG
+                              *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> conn sys/oracle@DB809.world as sysdba
+Connected.
+SQL> CREATE USER BOB IDENTIFIED BY ALONG
+  2  DEFAULT TABLESPACE USERS01
+  3  TEMPORARY TABLESPACE TEMP01
+  4  QUOTA 512K ON USERS01;
+
+User created.
+
+SQL> GRANT CONNECT,RESOURCE,UNLIMITED TABLESPACE TO BOB IDENTIFIED BY ALONG;
+
+Grant succeeded.
+
+SQL> SELECT USERNAME, DEFAULT_TABLESPACE, TEMPORARY_TABLESPACE FROM DBA_USERS;
+
+USERNAME                       DEFAULT_TABLESPACE                               
+------------------------------ ------------------------------                   
+TEMPORARY_TABLESPACE                                                            
+------------------------------                                                  
+OUTLN                          SYSTEM                                           
+SYSTEM                                                                          
+                                                                                
+BOB                            USERS01                                          
+TEMP01                                                                          
+                                                                                
+SCOTT                          USERS01                                          
+TEMP01                                                                          
+                                                                                
+
+USERNAME                       DEFAULT_TABLESPACE                               
+------------------------------ ------------------------------                   
+TEMPORARY_TABLESPACE                                                            
+------------------------------                                                  
+SYS                            SYSTEM                                           
+SYSTEM                                                                          
+                                                                                
+SYSTEM                         SYSTEM                                           
+SYSTEM                                                                          
+                                                                                
+TSMSYS                         SYSTEM                                           
+SYSTEM                                                                          
+                                                                                
+
+USERNAME                       DEFAULT_TABLESPACE                               
+------------------------------ ------------------------------                   
+TEMPORARY_TABLESPACE                                                            
+------------------------------                                                  
+DIP                            SYSTEM                                           
+SYSTEM                                                                          
+                                                                                
+DBSNMP                         SYSAUX                                           
+SYSTEM                                                                          
+                                                                                
+
+8 rows selected.
+
+SQL> GRANT CREATE SESSION BOB IDENTIFIED BY ALONG;
+GRANT CREATE SESSION BOB IDENTIFIED BY ALONG
+                     *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> GRANT CREATE SESSION BOB IDENTIFIED BY ALONG;
+GRANT CREATE SESSION BOB IDENTIFIED BY ALONG
+                     *
+ERROR at line 1:
+ORA-00905: missing keyword 
+
+
+SQL> GRANT CREATE SESSION TO BOB IDENTIFIED BY ALONG;
+
+Grant succeeded.
+
+SQL> SELECT TABLESPACE_NAME, USERNAME,BYTES,MAX_BYTES,BLOCKS,MAX_BLOCKS FROM DBA_TS_QUOTAS;
+
+TABLESPACE_NAME                USERNAME                            BYTES        
+------------------------------ ------------------------------ ----------        
+ MAX_BYTES     BLOCKS MAX_BLOCKS                                                
+---------- ---------- ----------                                                
+USERS01                        BOB                                     0        
+    524288          0         64                                                
+                                                                                
+
+SQL> CONNECT BOB/ALONG@DB809.WORLD
+Connected.
+SQL> alter user BOB identified by SAM;
+
+User altered.
+
+SQL> alter user BOB identified by OLINK;
+
+User altered.
+
+SQL> SELECT GRANTEE,PRIVILEGE, ADM FROM DBA_SYS_PRIVS;
+SELECT GRANTEE,PRIVILEGE, ADM FROM DBA_SYS_PRIVS
+                                   *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> conn sys/oracle@DB809.world as sysdba
+Connected.
+SQL> SELECT GRANTEE,PRIVILEGE, ADM FROM DBA_SYS_PRIVS;
+SELECT GRANTEE,PRIVILEGE, ADM FROM DBA_SYS_PRIVS
+                          *
+ERROR at line 1:
+ORA-00904: "ADM": invalid identifier 
+
+
+SQL> SELECT GRANTEE,PRIVILEGE FROM DBA_SYS_PRIVS;
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYS                            CREATE ANY RULE                                  
+SYS                            CREATE ANY EVALUATION CONTEXT                    
+SYS                            MANAGE ANY QUEUE                                 
+SYS                            EXECUTE ANY PROCEDURE                            
+DBA                            CHANGE NOTIFICATION                              
+DBA                            ADMINISTER ANY SQL TUNING SET                    
+DBA                            ALTER ANY SQL PROFILE                            
+DBA                            CREATE RULE                                      
+DBA                            EXPORT FULL DATABASE                             
+DBA                            EXECUTE ANY EVALUATION CONTEXT                   
+DBA                            DEQUEUE ANY QUEUE                                
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            DROP ANY INDEXTYPE                               
+DBA                            ALTER ANY INDEXTYPE                              
+DBA                            EXECUTE ANY LIBRARY                              
+DBA                            CREATE ANY LIBRARY                               
+DBA                            CREATE ANY DIRECTORY                             
+DBA                            ALTER PROFILE                                    
+DBA                            EXECUTE ANY PROCEDURE                            
+DBA                            CREATE ROLE                                      
+DBA                            SELECT ANY SEQUENCE                              
+DBA                            DROP ANY INDEX                                   
+DBA                            UPDATE ANY TABLE                                 
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            INSERT ANY TABLE                                 
+DBA                            SELECT ANY TABLE                                 
+DBA                            DROP ROLLBACK SEGMENT                            
+DBA                            BECOME USER                                      
+DBA                            DROP TABLESPACE                                  
+DBA                            ALTER SESSION                                    
+DBA                            CREATE SESSION                                   
+EXP_FULL_DATABASE              READ ANY FILE GROUP                              
+IMP_FULL_DATABASE              DROP ANY LIBRARY                                 
+IMP_FULL_DATABASE              CREATE ANY MATERIALIZED VIEW                     
+IMP_FULL_DATABASE              DROP ANY TRIGGER                                 
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              EXECUTE ANY PROCEDURE                            
+IMP_FULL_DATABASE              CREATE ANY SYNONYM                               
+IMP_FULL_DATABASE              BECOME USER                                      
+RECOVERY_CATALOG_OWNER         CREATE SYNONYM                                   
+SCHEDULER_ADMIN                CREATE ANY JOB                                   
+OEM_ADVISOR                    CREATE JOB                                       
+OEM_MONITOR                    MANAGE ANY QUEUE                                 
+DBSNMP                         CREATE PROCEDURE                                 
+SYS                            ALTER ANY RULE                                   
+SYS                            CREATE RULE SET                                  
+SYS                            EXECUTE ANY EVALUATION CONTEXT                   
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYS                            INSERT ANY TABLE                                 
+SYS                            SELECT ANY TABLE                                 
+SYS                            LOCK ANY TABLE                                   
+DBA                            ANALYZE ANY DICTIONARY                           
+DBA                            ALTER ANY RULE SET                               
+DBA                            CREATE RULE SET                                  
+DBA                            DEBUG ANY PROCEDURE                              
+DBA                            CREATE DIMENSION                                 
+DBA                            ALTER ANY LIBRARY                                
+DBA                            UNDER ANY TYPE                                   
+DBA                            DROP ANY MATERIALIZED VIEW                       
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            DROP ANY TRIGGER                                 
+DBA                            ALTER ANY PROCEDURE                              
+DBA                            FORCE ANY TRANSACTION                            
+DBA                            ALTER DATABASE                                   
+DBA                            DELETE ANY TABLE                                 
+DBA                            ALTER ROLLBACK SEGMENT                           
+IMP_FULL_DATABASE              DROP ANY CONTEXT                                 
+IMP_FULL_DATABASE              CREATE ANY LIBRARY                               
+IMP_FULL_DATABASE              DROP ANY SEQUENCE                                
+IMP_FULL_DATABASE              CREATE ANY INDEX                                 
+IMP_FULL_DATABASE              CREATE ANY CLUSTER                               
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              INSERT ANY TABLE                                 
+IMP_FULL_DATABASE              DROP ROLLBACK SEGMENT                            
+RECOVERY_CATALOG_OWNER         CREATE CLUSTER                                   
+AQ_ADMINISTRATOR_ROLE          CREATE EVALUATION CONTEXT                        
+AQ_ADMINISTRATOR_ROLE          DEQUEUE ANY QUEUE                                
+SCHEDULER_ADMIN                EXECUTE ANY CLASS                                
+SCHEDULER_ADMIN                EXECUTE ANY PROGRAM                              
+SYS                            UPDATE ANY TABLE                                 
+RESOURCE                       CREATE TRIGGER                                   
+RESOURCE                       CREATE SEQUENCE                                  
+DBA                            EXECUTE ANY PROGRAM                              
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            EXECUTE ANY RULE                                 
+DBA                            IMPORT FULL DATABASE                             
+DBA                            EXECUTE ANY RULE SET                             
+DBA                            CREATE ANY RULE SET                              
+DBA                            FLASHBACK ANY TABLE                              
+DBA                            RESUMABLE                                        
+DBA                            ADMINISTER DATABASE TRIGGER                      
+DBA                            CREATE ANY OUTLINE                               
+DBA                            ALTER ANY DIMENSION                              
+DBA                            CREATE ANY DIMENSION                             
+DBA                            EXECUTE ANY OPERATOR                             
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            CREATE TYPE                                      
+DBA                            CREATE TRIGGER                                   
+DBA                            GRANT ANY ROLE                                   
+DBA                            DROP ANY VIEW                                    
+DBA                            CREATE VIEW                                      
+DBA                            LOCK ANY TABLE                                   
+DBA                            ALTER USER                                       
+DBA                            CREATE USER                                      
+DBA                            ALTER TABLESPACE                                 
+DBA                            CREATE TABLESPACE                                
+DBA                            RESTRICTED SESSION                               
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+EXP_FULL_DATABASE              RESUMABLE                                        
+EXP_FULL_DATABASE              EXECUTE ANY PROCEDURE                            
+IMP_FULL_DATABASE              DROP ANY OUTLINE                                 
+IMP_FULL_DATABASE              CREATE ANY CONTEXT                               
+IMP_FULL_DATABASE              GLOBAL QUERY REWRITE                             
+IMP_FULL_DATABASE              CREATE ANY OPERATOR                              
+IMP_FULL_DATABASE              DROP ANY TYPE                                    
+IMP_FULL_DATABASE              DROP PROFILE                                     
+IMP_FULL_DATABASE              CREATE ANY PROCEDURE                             
+IMP_FULL_DATABASE              DROP ANY VIEW                                    
+IMP_FULL_DATABASE              CREATE ANY VIEW                                  
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              SELECT ANY TABLE                                 
+IMP_FULL_DATABASE              DROP USER                                        
+IMP_FULL_DATABASE              CREATE TABLESPACE                                
+RECOVERY_CATALOG_OWNER         ALTER SESSION                                    
+AQ_ADMINISTRATOR_ROLE          CREATE RULE SET                                  
+AQ_ADMINISTRATOR_ROLE          ENQUEUE ANY QUEUE                                
+OEM_MONITOR                    CREATE JOB                                       
+OEM_MONITOR                    CREATE SESSION                                   
+SCOTT                          UNLIMITED TABLESPACE                             
+SYS                            DROP ANY RULE SET                                
+SYS                            ENQUEUE ANY QUEUE                                
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYS                            EXECUTE ANY TYPE                                 
+RESOURCE                       CREATE TYPE                                      
+RESOURCE                       CREATE PROCEDURE                                 
+RESOURCE                       CREATE CLUSTER                                   
+DBA                            CREATE ANY JOB                                   
+DBA                            CREATE JOB                                       
+DBA                            CREATE ANY RULE                                  
+DBA                            DROP ANY EVALUATION CONTEXT                      
+DBA                            CREATE ANY EVALUATION CONTEXT                    
+DBA                            CREATE EVALUATION CONTEXT                        
+DBA                            GRANT ANY OBJECT PRIVILEGE                       
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            SELECT ANY DICTIONARY                            
+DBA                            DROP ANY DIMENSION                               
+DBA                            UNDER ANY TABLE                                  
+DBA                            CREATE INDEXTYPE                                 
+DBA                            CREATE ANY OPERATOR                              
+DBA                            DROP ANY LIBRARY                                 
+DBA                            ANALYZE ANY                                      
+DBA                            ALTER ANY ROLE                                   
+DBA                            CREATE ANY SEQUENCE                              
+DBA                            CREATE ANY INDEX                                 
+DBA                            CREATE ANY TABLE                                 
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYSTEM                         GLOBAL QUERY REWRITE                             
+SYSTEM                         CREATE MATERIALIZED VIEW                         
+SYSTEM                         CREATE TABLE                                     
+EXP_FULL_DATABASE              EXECUTE ANY TYPE                                 
+EXP_FULL_DATABASE              SELECT ANY TABLE                                 
+IMP_FULL_DATABASE              MANAGE ANY QUEUE                                 
+IMP_FULL_DATABASE              ALTER ANY TYPE                                   
+IMP_FULL_DATABASE              DROP ANY MATERIALIZED VIEW                       
+IMP_FULL_DATABASE              DROP ANY ROLE                                    
+IMP_FULL_DATABASE              CREATE ROLE                                      
+IMP_FULL_DATABASE              CREATE PUBLIC DATABASE LINK                      
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              CREATE PUBLIC SYNONYM                            
+IMP_FULL_DATABASE              DROP ANY INDEX                                   
+IMP_FULL_DATABASE              DROP ANY TABLE                                   
+IMP_FULL_DATABASE              CREATE ROLLBACK SEGMENT                          
+OUTLN                          UNLIMITED TABLESPACE                             
+RECOVERY_CATALOG_OWNER         CREATE DATABASE LINK                             
+AQ_ADMINISTRATOR_ROLE          CREATE RULE                                      
+DBSNMP                         UNLIMITED TABLESPACE                             
+SYS                            CREATE RULE                                      
+SYS                            ALTER ANY EVALUATION CONTEXT                     
+SYS                            CREATE EVALUATION CONTEXT                        
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYS                            ANALYZE ANY                                      
+DBA                            MANAGE FILE GROUP                                
+DBA                            MANAGE SCHEDULER                                 
+DBA                            ADMINISTER RESOURCE MANAGER                      
+DBA                            ALTER ANY OUTLINE                                
+DBA                            DROP ANY CONTEXT                                 
+DBA                            EXECUTE ANY INDEXTYPE                            
+DBA                            UNDER ANY VIEW                                   
+DBA                            DROP ANY TYPE                                    
+DBA                            ALTER ANY TYPE                                   
+DBA                            ALTER ANY MATERIALIZED VIEW                      
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            CREATE PROFILE                                   
+DBA                            DROP PUBLIC DATABASE LINK                        
+DBA                            ALTER ANY INDEX                                  
+DBA                            CREATE CLUSTER                                   
+DBA                            COMMENT ANY TABLE                                
+DBA                            DROP ANY TABLE                                   
+DBA                            CREATE ROLLBACK SEGMENT                          
+DBA                            AUDIT SYSTEM                                     
+DBA                            ALTER SYSTEM                                     
+SYSTEM                         UNLIMITED TABLESPACE                             
+EXP_FULL_DATABASE              ADMINISTER RESOURCE MANAGER                      
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+EXP_FULL_DATABASE              BACKUP ANY TABLE                                 
+IMP_FULL_DATABASE              CREATE ANY DIMENSION                             
+IMP_FULL_DATABASE              CREATE ANY INDEXTYPE                             
+IMP_FULL_DATABASE              DROP ANY DIRECTORY                               
+IMP_FULL_DATABASE              CREATE PROFILE                                   
+IMP_FULL_DATABASE              DROP ANY PROCEDURE                               
+IMP_FULL_DATABASE              DROP PUBLIC SYNONYM                              
+IMP_FULL_DATABASE              DROP ANY CLUSTER                                 
+IMP_FULL_DATABASE              COMMENT ANY TABLE                                
+RECOVERY_CATALOG_OWNER         CREATE PROCEDURE                                 
+RECOVERY_CATALOG_OWNER         CREATE SEQUENCE                                  
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+RECOVERY_CATALOG_OWNER         CREATE TABLE                                     
+RECOVERY_CATALOG_OWNER         CREATE SESSION                                   
+OEM_MONITOR                    ADVISOR                                          
+SYS                            EXECUTE ANY RULE                                 
+SYS                            DROP ANY EVALUATION CONTEXT                      
+CONNECT                        CREATE SESSION                                   
+DBA                            MANAGE ANY FILE GROUP                            
+DBA                            EXECUTE ANY CLASS                                
+DBA                            DROP ANY RULE SET                                
+DBA                            DEBUG CONNECT SESSION                            
+DBA                            ON COMMIT REFRESH                                
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            ENQUEUE ANY QUEUE                                
+DBA                            CREATE ANY INDEXTYPE                             
+DBA                            CREATE ANY TYPE                                  
+DBA                            DROP ANY DIRECTORY                               
+DBA                            ALTER RESOURCE COST                              
+DBA                            CREATE ANY PROCEDURE                             
+DBA                            CREATE PROCEDURE                                 
+DBA                            FORCE TRANSACTION                                
+DBA                            ALTER ANY SEQUENCE                               
+DBA                            CREATE SEQUENCE                                  
+DBA                            CREATE ANY VIEW                                  
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            DROP PUBLIC SYNONYM                              
+DBA                            DROP ANY SYNONYM                                 
+DBA                            CREATE ANY CLUSTER                               
+DBA                            BACKUP ANY TABLE                                 
+DBA                            CREATE TABLE                                     
+EXP_FULL_DATABASE              SELECT ANY SEQUENCE                              
+IMP_FULL_DATABASE              ADMINISTER RESOURCE MANAGER                      
+IMP_FULL_DATABASE              DROP ANY DIMENSION                               
+IMP_FULL_DATABASE              DROP ANY INDEXTYPE                               
+IMP_FULL_DATABASE              EXECUTE ANY TYPE                                 
+IMP_FULL_DATABASE              CREATE ANY TYPE                                  
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              CREATE ANY DIRECTORY                             
+IMP_FULL_DATABASE              ANALYZE ANY                                      
+IMP_FULL_DATABASE              ALTER ANY TRIGGER                                
+IMP_FULL_DATABASE              DROP PUBLIC DATABASE LINK                        
+IMP_FULL_DATABASE              DROP ANY SYNONYM                                 
+IMP_FULL_DATABASE              UPDATE ANY TABLE                                 
+IMP_FULL_DATABASE              DROP TABLESPACE                                  
+RECOVERY_CATALOG_OWNER         CREATE TYPE                                      
+RECOVERY_CATALOG_OWNER         CREATE VIEW                                      
+AQ_ADMINISTRATOR_ROLE          MANAGE ANY QUEUE                                 
+SCHEDULER_ADMIN                CREATE EXTERNAL JOB                              
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SCHEDULER_ADMIN                MANAGE SCHEDULER                                 
+BOB                            UNLIMITED TABLESPACE                             
+BOB                            CREATE SESSION                                   
+SYS                            EXECUTE ANY RULE SET                             
+SYS                            ALTER ANY RULE SET                               
+SYS                            DEQUEUE ANY QUEUE                                
+SYS                            DELETE ANY TABLE                                 
+RESOURCE                       CREATE OPERATOR                                  
+DBA                            ADMINISTER SQL TUNING SET                        
+DBA                            MERGE ANY VIEW                                   
+DBA                            DROP ANY OUTLINE                                 
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            CREATE OPERATOR                                  
+DBA                            CREATE LIBRARY                                   
+DBA                            GRANT ANY PRIVILEGE                              
+DBA                            DROP PROFILE                                     
+DBA                            ALTER ANY TRIGGER                                
+DBA                            CREATE ANY TRIGGER                               
+DBA                            DROP ANY PROCEDURE                               
+DBA                            AUDIT ANY                                        
+DBA                            DROP ANY ROLE                                    
+DBA                            DROP ANY SEQUENCE                                
+DBA                            CREATE PUBLIC SYNONYM                            
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            CREATE SYNONYM                                   
+DBA                            DROP ANY CLUSTER                                 
+DBA                            ALTER ANY TABLE                                  
+SYSTEM                         SELECT ANY TABLE                                 
+IMP_FULL_DATABASE              CREATE ANY SQL PROFILE                           
+IMP_FULL_DATABASE              DROP ANY SQL PROFILE                             
+IMP_FULL_DATABASE              RESUMABLE                                        
+IMP_FULL_DATABASE              DROP ANY OPERATOR                                
+IMP_FULL_DATABASE              ALTER ANY PROCEDURE                              
+IMP_FULL_DATABASE              AUDIT ANY                                        
+IMP_FULL_DATABASE              CREATE DATABASE LINK                             
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+IMP_FULL_DATABASE              CREATE ANY TABLE                                 
+IMP_FULL_DATABASE              CREATE USER                                      
+OUTLN                          EXECUTE ANY PROCEDURE                            
+OUTLN                          CREATE SESSION                                   
+DIP                            CREATE SESSION                                   
+TSMSYS                         UNLIMITED TABLESPACE                             
+OEM_ADVISOR                    ADMINISTER SQL TUNING SET                        
+OEM_MONITOR                    SELECT ANY DICTIONARY                            
+OEM_MONITOR                    ANALYZE ANY                                      
+DBSNMP                         SELECT ANY DICTIONARY                            
+SYS                            DROP ANY RULE                                    
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+SYS                            CREATE ANY RULE SET                              
+SYS                            SELECT ANY SEQUENCE                              
+RESOURCE                       CREATE INDEXTYPE                                 
+RESOURCE                       CREATE TABLE                                     
+DBA                            CREATE EXTERNAL JOB                              
+DBA                            READ ANY FILE GROUP                              
+DBA                            CREATE ANY SQL PROFILE                           
+DBA                            DROP ANY SQL PROFILE                             
+DBA                            SELECT ANY TRANSACTION                           
+DBA                            ADVISOR                                          
+DBA                            DROP ANY RULE                                    
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            ALTER ANY RULE                                   
+DBA                            ALTER ANY EVALUATION CONTEXT                     
+DBA                            CREATE ANY CONTEXT                               
+DBA                            MANAGE ANY QUEUE                                 
+DBA                            GLOBAL QUERY REWRITE                             
+DBA                            QUERY REWRITE                                    
+DBA                            DROP ANY OPERATOR                                
+DBA                            EXECUTE ANY TYPE                                 
+DBA                            CREATE ANY MATERIALIZED VIEW                     
+DBA                            CREATE MATERIALIZED VIEW                         
+DBA                            CREATE PUBLIC DATABASE LINK                      
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+DBA                            CREATE DATABASE LINK                             
+DBA                            CREATE ANY SYNONYM                               
+DBA                            ALTER ANY CLUSTER                                
+DBA                            DROP USER                                        
+DBA                            MANAGE TABLESPACE                                
+IMP_FULL_DATABASE              ADMINISTER DATABASE TRIGGER                      
+IMP_FULL_DATABASE              CREATE ANY TRIGGER                               
+IMP_FULL_DATABASE              CREATE ANY SEQUENCE                              
+IMP_FULL_DATABASE              ALTER ANY TABLE                                  
+RECOVERY_CATALOG_OWNER         CREATE TRIGGER                                   
+SCHEDULER_ADMIN                CREATE JOB                                       
+
+GRANTEE                        PRIVILEGE                                        
+------------------------------ ----------------------------------------         
+OEM_ADVISOR                    ADVISOR                                          
+OEM_MONITOR                    ANALYZE ANY DICTIONARY                           
+DBSNMP                         CREATE TABLE                                     
+
+322 rows selected.
+
+SQL> CREATE ROLE DEV;
+
+Role created.
+
+
+SQL> SPOOL OFF;
